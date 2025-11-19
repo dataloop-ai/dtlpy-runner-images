@@ -20,6 +20,12 @@ All images are hosted on `hub.dataloop.ai/dtlpy-runner-images/` and come pre-con
 - **PyTorch 2**: `hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_pytorch2`
 - **TensorFlow 2.16**: `hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_tf2.16`
 
+#### Python 3.12
+
+- **OpenCV**: `hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_opencv`
+- **PyTorch 2**: `hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_pytorch2`
+- **TensorFlow 2.16**: `hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_tf2.16`
+
 ### GPU Images (CUDA 11.8)
 
 #### Python 3.10
@@ -31,6 +37,11 @@ All images are hosted on `hub.dataloop.ai/dtlpy-runner-images/` and come pre-con
 
 - **OpenCV**: `hub.dataloop.ai/dtlpy-runner-images/gpu:python3.11_cuda11.8_opencv`
 - **PyTorch 2**: `hub.dataloop.ai/dtlpy-runner-images/gpu:python3.11_cuda11.8_pytorch2`
+
+#### Python 3.12
+
+- **OpenCV**: `hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_opencv`
+- **PyTorch 2**: `hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_pytorch2`
 
 ## Usage
 
