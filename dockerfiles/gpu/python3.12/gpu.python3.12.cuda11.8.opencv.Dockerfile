@@ -1,4 +1,4 @@
-FROM hub.dataloop.ai/dtlpy-runner-images/gpu:11.8.0-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 MAINTAINER Dataloop Team <info@dataloop.ai>
 ENV DEBIAN_FRONTEND='noninteractive'
 RUN apt-get update && apt-get install -y \

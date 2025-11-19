@@ -1,4 +1,4 @@
-FROM hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_cuda11.8_opencv
+FROM hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_opencv
 
 USER 1000
 ENV HOME=/tmp
