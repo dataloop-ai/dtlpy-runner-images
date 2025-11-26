@@ -71,5 +71,5 @@ RUN chmod -R 777 /tmp && \
 
 # docker pull hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
 # docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.10/cpu.python3.10.opencv.Dockerfile' -t 'dtlpyagent:latest' . 
-# docker tag dtlpyagent:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv_no_user
-# docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv_no_user
+# docker tag dtlpyagent:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
+# docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
