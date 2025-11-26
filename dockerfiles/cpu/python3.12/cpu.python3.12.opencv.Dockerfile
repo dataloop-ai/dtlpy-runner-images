@@ -1,8 +1,10 @@
 FROM python:3.12
 
+ENV DL_PYTHON_EXECUTABLE=/usr/local/bin/python3.12
+
 # Ensure all python/python3 commands point to python3.12 for all users
-RUN ln -sf /usr/local/bin/python3.12 /usr/bin/python && \
-    ln -sf /usr/local/bin/python3.12 /usr/bin/python3 && \
+RUN ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python && \
+    ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python3 && \
     ln -sf /usr/local/bin/pip3 /usr/bin/pip && \
     ln -sf /usr/local/bin/pip3 /usr/bin/pip3
 
@@ -14,14 +16,12 @@ RUN code-server --install-extension ms-python.python
 # Set HOME to /tmp for all users
 ENV HOME=/tmp
 
-ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.12
-
 # Add /tmp/.local/bin to PATH so user-installed scripts are accessible
 ENV PATH="/tmp/.local/bin:${PATH}"
 
 # Install Python packages system-wide as root so any user can access them
-RUN /usr/local/bin/python3.12 -m pip install --upgrade pip && \
-    /usr/local/bin/python3.12 -m pip install --no-cache-dir \
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
+    ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'numpy' \
     'scipy' \
     'scikit-image' \

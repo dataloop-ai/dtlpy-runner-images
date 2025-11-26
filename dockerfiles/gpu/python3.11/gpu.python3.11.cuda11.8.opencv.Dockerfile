@@ -39,10 +39,10 @@ ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.11
 ENV PATH="/tmp/.local/bin:${PATH}"
 
 # Install Python packages system-wide as root so any user can access them
-RUN /usr/bin/python3.11 -m pip install --upgrade pip
-RUN /usr/bin/python3.11 -m pip install --upgrade setuptools
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade setuptools
 
-RUN /usr/bin/python3.11 -m pip install --no-cache-dir \
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=0.29' \
     'imgaug' \
     'ffmpeg-python' \
