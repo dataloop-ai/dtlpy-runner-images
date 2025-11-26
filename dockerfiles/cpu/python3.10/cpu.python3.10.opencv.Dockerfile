@@ -1,12 +1,27 @@
 FROM python:3.10
+
+# Ensure all python/python3 commands point to python3.10 for all users
+RUN ln -sf /usr/local/bin/python3.10 /usr/bin/python && \
+    ln -sf /usr/local/bin/python3.10 /usr/bin/python3 && \
+    ln -sf /usr/local/bin/pip3 /usr/bin/pip && \
+    ln -sf /usr/local/bin/pip3 /usr/bin/pip3
+
 RUN apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6  -y
+RUN apt-get install ffmpeg libsm6 libxext6 acl -y
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 RUN code-server --install-extension ms-python.python
 
-USER 1000
+# Set HOME to /tmp for all users
 ENV HOME=/tmp
-RUN /usr/local/bin/python -m pip install --upgrade pip && pip3 --no-cache-dir install \
+
+ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.10
+
+# Add /tmp/.local/bin to PATH so user-installed scripts are accessible
+ENV PATH="/tmp/.local/bin:${PATH}"
+
+# Install Python packages system-wide as root so any user can access them
+RUN /usr/local/bin/python3.10 -m pip install --upgrade pip && \
+    /usr/local/bin/python3.10 -m pip install --no-cache-dir \
     'numpy<1.22,>=1.16.2' \
     'scipy' \
     'scikit-image' \
@@ -44,4 +59,17 @@ RUN /usr/local/bin/python -m pip install --upgrade pip && pip3 --no-cache-dir in
 COPY code-server-installation.sh /tmp/code-server-installation.sh
 RUN bash /tmp/code-server-installation.sh
 
+# Set umask 0000 for all users and sessions so any created file/directory is world-writable
+RUN echo 'umask 0000' >> /etc/bash.bashrc && \
+    echo 'umask 0000' >> /etc/profile && \
+    echo 'session optional pam_umask.so umask=0000' >> /etc/pam.d/common-session 2>/dev/null || true
+
+# Make /tmp and EVERYTHING inside it accessible by all users (recursively)
+# This includes any directories created by pip during package installation
+RUN chmod -R 777 /tmp && \
+    chmod 1777 /tmp
+
 # docker pull hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
+# docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.10/cpu.python3.10.opencv.Dockerfile' -t 'dtlpyagent:latest' . 
+# docker tag dtlpyagent:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv_no_user
+# docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv_no_user
