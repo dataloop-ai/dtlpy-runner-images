@@ -44,12 +44,12 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade setuptools
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=0.29' \
+    'numpy>=2.0,<3' \
     'imgaug' \
     'ffmpeg-python' \
     'tornado==6.0.2' \
-    'opencv_python' \
+    'opencv-python-headless>=4.1.2' \
     'Pillow>=11.0.0' \
-    'numpy<1.22 , >=1.16.2' \
     'scipy' \
     'scikit-image' \
     'scikit-learn' \

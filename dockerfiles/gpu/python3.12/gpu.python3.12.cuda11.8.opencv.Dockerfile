@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y \
     python3.12 \
     python3.12-venv \
-    python3-pip \
     python3-tk \
     python3-opengl 
 
@@ -41,18 +40,21 @@ ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.12
 # Add /tmp/.local/bin to PATH so user-installed scripts are accessible
 ENV PATH="/tmp/.local/bin:${PATH}"
 
+# Install pip using ensurepip (Python 3.12 compatible)
+RUN ${DL_PYTHON_EXECUTABLE} -m ensurepip --upgrade || \
+    (curl -sS https://bootstrap.pypa.io/get-pip.py | ${DL_PYTHON_EXECUTABLE})
+
 # Install Python packages system-wide as root so any user can access them
-RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip
-RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade setuptools
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip setuptools
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=0.29' \
+    'numpy>=2.0,<3' \
     'imgaug' \
     'ffmpeg-python' \
     'tornado==6.0.2' \
-    'opencv_python' \
+    'opencv-python-headless>=4.1.2' \
     'Pillow>=11.0.0' \
-    'numpy<1.22 , >=1.16.2' \
     'scipy' \
     'scikit-image' \
     'scikit-learn' \
