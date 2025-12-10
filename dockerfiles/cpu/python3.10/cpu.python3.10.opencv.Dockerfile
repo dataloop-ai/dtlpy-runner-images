@@ -1,0 +1,71 @@
+FROM python:3.10
+
+ENV DL_PYTHON_EXECUTABLE=/usr/local/bin/python3.10
+ENV PIP_NO_CACHE_DIR=1
+
+# Ensure all python/python3 commands point to python3.10 for all users
+RUN ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python && \
+    ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python3 && \
+    ln -sf /usr/local/bin/pip3 /usr/bin/pip && \
+    ln -sf /usr/local/bin/pip3 /usr/bin/pip3
+
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6 acl -y
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+RUN code-server --install-extension ms-python.python
+
+# Set HOME to /tmp for all users
+ENV HOME=/tmp
+
+# Add /tmp/.local/bin to PATH so user-installed scripts are accessible
+ENV PATH="/tmp/.local/bin:${PATH}"
+
+# Install Python packages system-wide as root so any user can access them
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
+    ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
+    'numpy<1.22,>=1.16.2' \
+    'scipy' \
+    'scikit-image' \
+    'py3nvml' \
+    'pika==1.0.1' \
+    'opencv-python-headless>=4.1.2' \
+    'nms==0.1.6' \
+    'imgaug==0.2.9' \
+    'Pillow>=11.0.0' \
+    'ffmpeg-python' \
+    'tornado==6.0.2' \
+    'psutil==5.6.7' \
+    'certifi>=2020.12.5 ,<2021.10.8' \
+    'webvtt-py==0.4.3' \
+    'aiohttp>=3.6.2 , <4.0.0' \
+    'requests-toolbelt==0.9.1' \
+    'requests>=2.21.0, <2.26.0' \
+    'pandas>=0.24.2, <1.4' \
+    'tabulate==0.8.9' \
+    'tqdm>=4.32.2, <4.62.3' \
+    'PyJWT>=2.4' \
+    'jinja2>=2.11.3, <3.0.2' \
+    'attrs<20.0.0' \
+    'prompt_toolkit>=2.0.9 , <3.0.20' \
+    'fuzzyfinder<=2.1.0' \
+    'dictdiffer>=0.8.1, <0.9.0' \
+    'validators<=0.18.2' \
+    'pathspec>=0.8.1 , <0.10' \
+    'filelock>=3.0.12, <3.5.0' \
+    'diskcache==5.2.1' \
+    'redis==4.1.3' \
+    'pydantic' \
+    'websocket-client==1.2.3'
+
+COPY code-server-installation.sh /tmp/code-server-installation.sh
+RUN bash /tmp/code-server-installation.sh
+
+# Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
+RUN chmod -R 777 /tmp && \
+    chmod 1777 /tmp && \
+    setfacl -R -m d:o::rwx /tmp
+
+# docker pull hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
+# docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.10/cpu.python3.10.opencv.Dockerfile' -t 'dtlpyagent:latest' . 
+# docker tag dtlpyagent:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
+# docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
