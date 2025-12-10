@@ -1,6 +1,7 @@
 FROM python:3.11
 
 ENV DL_PYTHON_EXECUTABLE=/usr/local/bin/python3.11
+ENV PIP_NO_CACHE_DIR=1
 
 # Ensure all python/python3 commands point to python3.11 for all users
 RUN ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python && \

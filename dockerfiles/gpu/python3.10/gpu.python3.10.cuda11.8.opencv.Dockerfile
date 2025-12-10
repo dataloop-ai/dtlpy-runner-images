@@ -34,6 +34,7 @@ ENV LC_ALL en_US.UTF-8
 ENV HOME=/tmp
 
 ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.10
+ENV PIP_NO_CACHE_DIR=1
 
 # Add /tmp/.local/bin to PATH so user-installed scripts are accessible
 ENV PATH="/tmp/.local/bin:${PATH}"
