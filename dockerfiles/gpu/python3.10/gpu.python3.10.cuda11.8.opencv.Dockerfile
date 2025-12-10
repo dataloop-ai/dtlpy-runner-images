@@ -1,33 +1,48 @@
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 MAINTAINER Dataloop Team <info@dataloop.ai>
 ENV DEBIAN_FRONTEND='noninteractive'
+
 RUN apt-get update && apt-get install -y \
     build-essential \
     locales \
     git \
     wget \
     bzip2 \
+    curl \
     software-properties-common \
     python3.10 \
     python3.10-venv \
     python3-pip \
     python3-tk \
-    python3-opengl
+    python3-opengl 
+
+# Ensure all python/python3 commands point to python3.10 for all users
+RUN ln -sf /usr/bin/python3.10 /usr/bin/python && \
+    ln -sf /usr/bin/python3.10 /usr/bin/python3
+
 
 RUN mkdir -p /src
 ENV PYTHONPATH="$PYTHONPATH:/src"
+
 # fix for other languages issues
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
 
-RUN pip3 install --upgrade pip
-RUN pip3 install --upgrade setuptools
+# Set HOME to /tmp for all users
+ENV HOME=/tmp
 
-RUN pip3 --no-cache-dir install \
+ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.10
+
+# Add /tmp/.local/bin to PATH so user-installed scripts are accessible
+ENV PATH="/tmp/.local/bin:${PATH}"
+
+# Install Python packages system-wide as root so any user can access them
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade setuptools
+
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=0.29' \
     'imgaug' \
     'ffmpeg-python' \
@@ -59,5 +74,16 @@ RUN pip3 --no-cache-dir install \
     'diskcache==5.2.1' \
     'redis==4.1.3' \
     'pydantic'
+
+
+# Set umask 0000 for all users and sessions so any created file/directory is world-writable
+RUN echo 'umask 0000' >> /etc/bash.bashrc && \
+    echo 'umask 0000' >> /etc/profile && \
+    echo 'session optional pam_umask.so umask=0000' >> /etc/pam.d/common-session 2>/dev/null || true
+
+# Make /tmp and EVERYTHING inside it accessible by all users (recursively)
+# This includes any directories created by pip during package installation
+RUN chmod -R 777 /tmp && \
+    chmod 1777 /tmp
 
 # docker pull hub.dataloop.ai/dtlpy-runner-images/gpu:python3.10_cuda11.8_opencv

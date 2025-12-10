@@ -1,43 +1,60 @@
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 MAINTAINER Dataloop Team <info@dataloop.ai>
 ENV DEBIAN_FRONTEND='noninteractive'
+
 RUN apt-get update && apt-get install -y \
     build-essential \
     locales \
     git \
     wget \
     bzip2 \
+    curl \
     software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa -y \
     && apt-get update \
     && apt-get install -y \
     python3.12 \
     python3.12-venv \
-    python3-pip \
     python3-tk \
-    python3-opengl
+    python3-opengl 
+
+# Ensure all python/python3 commands point to python3.12 for all users
+RUN ln -sf /usr/bin/python3.12 /usr/bin/python && \
+    ln -sf /usr/bin/python3.12 /usr/bin/python3
+
 
 RUN mkdir -p /src
 ENV PYTHONPATH="$PYTHONPATH:/src"
+
 # fix for other languages issues
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
 
-RUN pip3 install --upgrade pip
-RUN pip3 install --upgrade setuptools
+# Set HOME to /tmp for all users
+ENV HOME=/tmp
 
-RUN pip3 --no-cache-dir install \
+ENV DL_PYTHON_EXECUTABLE=/usr/bin/python3.12
+
+# Add /tmp/.local/bin to PATH so user-installed scripts are accessible
+ENV PATH="/tmp/.local/bin:${PATH}"
+
+# Install pip using ensurepip (Python 3.12 compatible)
+RUN ${DL_PYTHON_EXECUTABLE} -m ensurepip --upgrade || \
+    (curl -sS https://bootstrap.pypa.io/get-pip.py | ${DL_PYTHON_EXECUTABLE})
+
+# Install Python packages system-wide as root so any user can access them
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip setuptools
+
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=0.29' \
+    'numpy>=2.0,<3' \
     'imgaug' \
     'ffmpeg-python' \
     'tornado==6.0.2' \
-    'opencv_python' \
+    'opencv-python-headless>=4.1.2' \
     'Pillow>=11.0.0' \
-    'numpy<1.22 , >=1.16.2' \
     'scipy' \
     'scikit-image' \
     'scikit-learn' \
@@ -62,5 +79,16 @@ RUN pip3 --no-cache-dir install \
     'diskcache==5.2.1' \
     'redis==4.1.3' \
     'pydantic'
+
+
+# Set umask 0000 for all users and sessions so any created file/directory is world-writable
+RUN echo 'umask 0000' >> /etc/bash.bashrc && \
+    echo 'umask 0000' >> /etc/profile && \
+    echo 'session optional pam_umask.so umask=0000' >> /etc/pam.d/common-session 2>/dev/null || true
+
+# Make /tmp and EVERYTHING inside it accessible by all users (recursively)
+# This includes any directories created by pip during package installation
+RUN chmod -R 777 /tmp && \
+    chmod 1777 /tmp
 
 # docker pull hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_opencv

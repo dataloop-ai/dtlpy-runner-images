@@ -1,12 +1,27 @@
 FROM python:3.12
+
+ENV DL_PYTHON_EXECUTABLE=/usr/local/bin/python3.12
+
+# Ensure all python/python3 commands point to python3.12 for all users
+RUN ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python && \
+    ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python3 && \
+    ln -sf /usr/local/bin/pip3 /usr/bin/pip && \
+    ln -sf /usr/local/bin/pip3 /usr/bin/pip3
+
 RUN apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6  -y
+RUN apt-get install ffmpeg libsm6 libxext6 acl -y
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 RUN code-server --install-extension ms-python.python
 
-USER 1000
+# Set HOME to /tmp for all users
 ENV HOME=/tmp
-RUN /usr/local/bin/python -m pip install --upgrade pip && pip3 --no-cache-dir install \
+
+# Add /tmp/.local/bin to PATH so user-installed scripts are accessible
+ENV PATH="/tmp/.local/bin:${PATH}"
+
+# Install Python packages system-wide as root so any user can access them
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
+    ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'numpy' \
     'scipy' \
     'scikit-image' \
@@ -43,5 +58,15 @@ RUN /usr/local/bin/python -m pip install --upgrade pip && pip3 --no-cache-dir in
 
 COPY code-server-installation.sh /tmp/code-server-installation.sh
 RUN bash /tmp/code-server-installation.sh
+
+# Set umask 0000 for all users and sessions so any created file/directory is world-writable
+RUN echo 'umask 0000' >> /etc/bash.bashrc && \
+    echo 'umask 0000' >> /etc/profile && \
+    echo 'session optional pam_umask.so umask=0000' >> /etc/pam.d/common-session 2>/dev/null || true
+
+# Make /tmp and EVERYTHING inside it accessible by all users (recursively)
+# This includes any directories created by pip during package installation
+RUN chmod -R 777 /tmp && \
+    chmod 1777 /tmp
 
 # docker pull hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_opencv
