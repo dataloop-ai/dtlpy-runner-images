@@ -60,14 +60,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
 COPY code-server-installation.sh /tmp/code-server-installation.sh
 RUN bash /tmp/code-server-installation.sh
 
-# Set umask 0000 for all users and sessions so any created file/directory is world-writable
-RUN echo 'umask 0000' >> /etc/bash.bashrc && \
-    echo 'umask 0000' >> /etc/profile && \
-    echo 'session optional pam_umask.so umask=0000' >> /etc/pam.d/common-session 2>/dev/null || true
-
-# Make /tmp and EVERYTHING inside it accessible by all users (recursively)
-# This includes any directories created by pip during package installation
+# Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
 RUN chmod -R 777 /tmp && \
-    chmod 1777 /tmp
+    chmod 1777 /tmp && \
+    setfacl -R -m d:o::rwx /tmp
 
 # docker pull hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_opencv

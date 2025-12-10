@@ -1,0 +1,69 @@
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.11/cpu.python3.11.opencv.Dockerfile' -t '3.11.opencv:latest' '.' 
+docker tag 3.11.opencv:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_opencv
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_opencv
+
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.11/cpu.python3.11.pytorch2.Dockerfile' -t '3.11.pytorch2:latest' '.' 
+docker tag 3.11.pytorch2:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_pytorch2
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_pytorch2
+
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.11/cpu.python3.11.tf2.16.Dockerfile' -t '3.11.tf2.16:latest' '.' 
+docker tag 3.11.tf2.16:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_tf2.16
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.11_tf2.16
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.10/cpu.python3.10.opencv.Dockerfile' -t '3.10.opencv:latest' '.' 
+docker tag 3.10.opencv:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.10/cpu.python3.10.pytorch2.Dockerfile' -t '3.10.pytorch2:latest' '.' 
+docker tag 3.10.pytorch2:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_pytorch2
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_pytorch2
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.10/cpu.python3.10.tf2.16.Dockerfile' -t '3.10.tf2.16:latest' '.' 
+docker tag 3.10.tf2.16:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_tf2.16
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_tf2.16
+
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.12/cpu.python3.12.opencv.Dockerfile' -t '3.12.opencv:latest' '.' 
+docker tag 3.12.opencv:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_opencv
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_opencv
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.12/cpu.python3.12.pytorch2.Dockerfile' -t '3.12.pytorch2:latest' '.' 
+docker tag 3.12.pytorch2:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_pytorch2
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_pytorch2
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/cpu/python3.12/cpu.python3.12.tf2.16.Dockerfile' -t '3.12.tf2.16:latest' '.' 
+docker tag 3.12.tf2.16:latest hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_tf2.16
+docker push hub.dataloop.ai/dtlpy-runner-images/cpu:python3.12_tf2.16
+
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/gpu/python3.10/gpu.python3.10.cuda11.8.opencv.Dockerfile' -t '3.10.cuda11.8.opencv:latest' '.' 
+docker tag 3.10.cuda11.8.opencv:latest hub.dataloop.ai/dtlpy-runner-images/gpu:python3.10_cuda11.8_opencv
+docker push hub.dataloop.ai/dtlpy-runner-images/gpu:python3.10_cuda11.8_opencv
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/gpu/python3.10/gpu.python3.10.cuda11.8.pytorch2.Dockerfile' -t '3.10.cuda11.8.pytorch2:latest' '.' 
+docker tag 3.10.cuda11.8.pytorch2:latest hub.dataloop.ai/dtlpy-runner-images/gpu:python3.10_cuda11.8_pytorch2
+docker push hub.dataloop.ai/dtlpy-runner-images/gpu:python3.10_cuda11.8_pytorch2
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/gpu/python3.11/gpu.python3.11.cuda11.8.opencv.Dockerfile' -t '3.11.cuda11.8.opencv:latest' '.' 
+docker tag 3.11.cuda11.8.opencv:latest hub.dataloop.ai/dtlpy-runner-images/gpu:python3.11_cuda11.8_opencv
+docker push hub.dataloop.ai/dtlpy-runner-images/gpu:python3.11_cuda11.8_opencv
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/gpu/python3.11/gpu.python3.11.cuda11.8.pytorch2.Dockerfile' -t '3.11.cuda11.8.pytorch2:latest' '.' 
+docker tag 3.11.cuda11.8.pytorch2:latest hub.dataloop.ai/dtlpy-runner-images/gpu:python3.11_cuda11.8_pytorch2
+docker push hub.dataloop.ai/dtlpy-runner-images/gpu:python3.11_cuda11.8_pytorch2
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/gpu/python3.12/gpu.python3.12.cuda11.8.opencv.Dockerfile' -t '3.12.cuda11.8.opencv:latest' '.' 
+docker tag 3.12.cuda11.8.opencv:latest hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_opencv
+docker push hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_opencv
+
+docker build --platform linux/amd64  --pull --rm -f 'dockerfiles/gpu/python3.12/gpu.python3.12.cuda11.8.pytorch2.Dockerfile' -t '3.12.cuda11.8.pytorch2:latest' '.' 
+docker tag 3.12.cuda11.8.pytorch2:latest hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_pytorch2
+docker push hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_pytorch2
+
+
+
+
+
+docker login hub.dataloop.ai --username dlhubuser --password xv9W#PsAXlAPS_DU3zqpOh

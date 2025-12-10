@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y \
     python3.12 \
     python3.12-venv \
     python3-tk \
-    python3-opengl 
+    python3-opengl \
+    acl
 
 # Ensure all python/python3 commands point to python3.12 for all users
 RUN ln -sf /usr/bin/python3.12 /usr/bin/python && \
@@ -82,14 +83,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'pydantic'
 
 
-# Set umask 0000 for all users and sessions so any created file/directory is world-writable
-RUN echo 'umask 0000' >> /etc/bash.bashrc && \
-    echo 'umask 0000' >> /etc/profile && \
-    echo 'session optional pam_umask.so umask=0000' >> /etc/pam.d/common-session 2>/dev/null || true
-
-# Make /tmp and EVERYTHING inside it accessible by all users (recursively)
-# This includes any directories created by pip during package installation
+# Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
 RUN chmod -R 777 /tmp && \
-    chmod 1777 /tmp
+    chmod 1777 /tmp && \
+    setfacl -R -m d:o::rwx /tmp
 
 # docker pull hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_opencv
