@@ -23,7 +23,8 @@ ENV PATH="/tmp/.local/bin:${PATH}"
 # Install Python packages system-wide as root so any user can access them
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
-    'numpy' \
+    'numpy>=2.0,<3' \
+    "pandas>=2.2,<3" \
     'scipy' \
     'scikit-image' \
     'py3nvml' \
@@ -40,7 +41,6 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     'aiohttp>=3.6.2 , <4.0.0' \
     'requests-toolbelt==0.9.1' \
     'requests>=2.21.0, <2.26.0' \
-    'pandas>=0.24.2, <1.4' \
     'tabulate==0.8.9' \
     'tqdm>=4.32.2, <4.62.3' \
     'PyJWT>=2.4' \
