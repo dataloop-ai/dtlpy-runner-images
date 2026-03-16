@@ -110,16 +110,19 @@ Check out a real example in the [RF-DETR Adapter](https://github.com/dataloop-ai
 
 ### Option 2: Build Custom Images
 
-Use these images as base images to add your own dependencies and configurations:
+Use these images as base images to add your own dependencies and configurations.
+
+> **Guidelines for building custom Dockerfiles:**
+>
+> 1. **Do not set a specific user** (e.g., `USER 1000`). All base images are configured so that any user has the same access.
+> 2. **Use `${DL_PYTHON_EXECUTABLE} -m pip install`** instead of bare `pip install`. This environment variable is set in every base image and ensures the correct Python interpreter is used.
+> 3. **Do not set `ENV HOME=/tmp`**. All base images already set `HOME=/tmp` with the proper permissions.
 
 ```dockerfile
 FROM hub.dataloop.ai/dtlpy-runner-images/cpu:python3.10_opencv
 
-USER 1000
-ENV HOME=/tmp
-
 # Install your custom dependencies
-RUN pip install --user your-package-name
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install your-package-name
 
 # Add your application code
 COPY your-app /app
@@ -148,7 +151,7 @@ Finally, reference your custom image in the `dataloop.json` file:
 
 All images come with:
 
-- Pre-installed Python environment (3.10 or 3.11)
+- Pre-installed Python environment (3.10, 3.11, or 3.12)
 - Common data science and ML libraries (numpy, scipy, pandas, etc.)
 - Dataloop platform dependencies
 - Code-server with Python extension (CPU OpenCV base images)
