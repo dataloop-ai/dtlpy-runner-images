@@ -29,7 +29,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     'wheel>=0.46.2'
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
-    'numpy>=1.26.0,<2' \
+    'numpy>=1.26.0,<2'
+
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'scipy' \
     'scikit-image' \
     'py3nvml==0.2.7' \

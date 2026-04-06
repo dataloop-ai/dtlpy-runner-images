@@ -53,15 +53,17 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=3.0.0' \
+    'numpy>=1.26.0,<2'
+
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'imgaug==0.4.0' \
     'ffmpeg-python' \
     'tornado==6.5.5' \
     'opencv-python-headless>=4.13.0' \
     'Pillow>=12.0.0' \
-    'numpy>=1.26.0,<2' \
     'scipy' \
     'scikit-image' \
-    'scikit-learn>=1.8.0' \
+    'scikit-learn>=1.7.0,<1.8' \
     'psutil>=7.0.0' \
     'websocket-client==1.9.0' \
     'certifi>=2026.2.25' \

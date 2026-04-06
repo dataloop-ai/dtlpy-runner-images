@@ -53,7 +53,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'Cython>=3.0.0' \
-    'numpy>=2.4.0,<3' \
+    'numpy>=2.4.0,<3'
+
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'ffmpeg-python' \
     'tornado==6.5.5' \
     'opencv-python-headless>=4.13.0' \

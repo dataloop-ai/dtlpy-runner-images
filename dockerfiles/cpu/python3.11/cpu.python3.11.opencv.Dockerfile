@@ -29,7 +29,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     'wheel>=0.46.2'
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
-    'numpy>=2.4.0,<3' \
+    'numpy>=2.4.0,<3'
+
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'pandas>=2.2,<3' \
     'scipy' \
     'scikit-image' \

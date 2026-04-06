@@ -154,8 +154,6 @@ All images come with:
 - Pre-installed Python environment (3.10, 3.11, or 3.12)
 - Common data science and ML libraries (numpy, scipy, pandas, etc.)
 - Dataloop platform dependencies
-- Code-server with Python extension (CPU OpenCV base images)
-
 Specific images include:
 
 - **OpenCV images**: Computer vision libraries and dependencies
