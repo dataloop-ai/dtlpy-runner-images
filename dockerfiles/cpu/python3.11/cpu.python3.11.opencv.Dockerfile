@@ -14,13 +14,6 @@ RUN apt-get update && \
     apt-get install -y ffmpeg libsm6 libxext6 acl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN CODESERVER_VERSION=4.112.0 && \
-    curl -fsSL -o /tmp/code-server.deb \
-        "https://github.com/coder/code-server/releases/download/v${CODESERVER_VERSION}/code-server_${CODESERVER_VERSION}_amd64.deb" && \
-    echo "28c85f281304de6fb88a69e8d92e4baed3b99070a8f010b747667b39e5bae2ae  /tmp/code-server.deb" | sha256sum -c - && \
-    dpkg -i /tmp/code-server.deb && \
-    rm /tmp/code-server.deb
-RUN code-server --install-extension ms-python.python
 
 # Set HOME to /tmp for all users
 ENV HOME=/tmp
@@ -37,14 +30,13 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'numpy>=2.4.0,<3' \
-    "pandas>=2.2,<3" \
+    'pandas>=2.2,<3' \
     'scipy' \
     'scikit-image' \
-    'py3nvml' \
+    'py3nvml==0.2.7' \
     'pika==1.3.2' \
-    'opencv-python-headless>=4.1.2' \
+    'opencv-python-headless>=4.13.0' \
     'nms==0.1.6' \
-    'imgaug==0.4.0' \
     'Pillow>=12.0.0' \
     'ffmpeg-python' \
     'tornado==6.5.5' \
@@ -65,13 +57,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'validators>=0.35.0' \
     'pathspec>=1.0.0' \
     'filelock>=3.25.0' \
-    'diskcache==5.6.3' \
     'redis>=5.0.0,<6' \
-    'pydantic>=2.12.0' \
+    'pydantic>=2.12.0,<3' \
     'websocket-client==1.9.0'
-
-COPY code-server-installation.sh /tmp/code-server-installation.sh
-RUN bash /tmp/code-server-installation.sh
 
 # Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
 RUN chmod -R 777 /tmp && \

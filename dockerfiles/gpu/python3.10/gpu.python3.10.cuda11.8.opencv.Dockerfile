@@ -80,9 +80,8 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'validators>=0.35.0' \
     'pathspec>=1.0.0' \
     'filelock>=3.25.0' \
-    'diskcache==5.6.3' \
     'redis>=5.0.0,<6' \
-    'pydantic>=2.12.0'
+    'pydantic>=2.12.0,<3'
 
 
 # Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)

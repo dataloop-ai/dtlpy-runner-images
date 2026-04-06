@@ -1,0 +1,7 @@
+.git
+.gitignore
+.dockerignore
+CHANGES.md
+README.md
+build-and-push.sh
+*.md
