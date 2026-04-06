@@ -1,8 +1,10 @@
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
-MAINTAINER Dataloop Team <info@dataloop.ai>
+LABEL maintainer="Dataloop Team <info@dataloop.ai>"
 ENV DEBIAN_FRONTEND='noninteractive'
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
     build-essential \
     locales \
     git \
@@ -15,7 +17,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-tk \
     python3-opengl \
-    acl
+    acl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Ensure all python/python3 commands point to python3.10 for all users
 RUN ln -sf /usr/bin/python3.10 /usr/bin/python && \
@@ -41,41 +45,43 @@ ENV PIP_NO_CACHE_DIR=1
 ENV PATH="/tmp/.local/bin:${PATH}"
 
 # Install Python packages system-wide as root so any user can access them
-RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip
-RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade setuptools
+RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
+    ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
+    'pip>=26.0' \
+    'setuptools>=82.0' \
+    'wheel>=0.46.2'
 
 RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
-    'Cython>=0.29' \
-    'imgaug' \
+    'Cython>=3.0.0' \
+    'imgaug==0.4.0' \
     'ffmpeg-python' \
-    'tornado==6.0.2' \
-    'opencv_python' \
-    'Pillow>=11.0.0' \
-    'numpy<1.22 , >=1.16.2' \
+    'tornado==6.5.5' \
+    'opencv-python-headless>=4.13.0' \
+    'Pillow>=12.0.0' \
+    'numpy>=1.26.0,<2' \
     'scipy' \
     'scikit-image' \
-    'scikit-learn' \
-    'psutil' \
-    'websocket-client==1.2.3' \
-    'certifi>=2020.12.5 ,<2021.10.8' \
-    'aiohttp>=3.6.2 , <4.0.0' \
-    'requests-toolbelt==0.9.1' \
-    'requests>=2.21.0, <2.26.0' \
-    'pandas' \
-    'tabulate' \
-    'tqdm>=4.32.2, <4.62.3' \
+    'scikit-learn>=1.8.0' \
+    'psutil>=7.0.0' \
+    'websocket-client==1.9.0' \
+    'certifi>=2026.2.25' \
+    'aiohttp>=3.13.0,<4' \
+    'requests-toolbelt==1.0.0' \
+    'requests>=2.32.0,<3' \
+    'pandas>=2.2.0,<3' \
+    'tabulate==0.10.0' \
+    'tqdm>=4.67.0' \
     'PyJWT<=1.7.1' \
-    'jinja2>=2.11.3, <3.0.2' \
-    'attrs<20.0.0' \
-    'prompt_toolkit>=2.0.9 , <3.0.20' \
-    'fuzzyfinder<=2.1.0' \
-    'dictdiffer>=0.8.1, <0.9.0' \
-    'validators<=0.18.2'\
-    'pathspec>=0.8.1 , <0.10' \
-    'filelock>=3.0.12, <3.5.0' \
-    'diskcache==5.2.1' \
-    'redis==4.1.3' \
-    'pydantic'
+    'jinja2>=3.1.6,<4' \
+    'attrs>=26.0.0' \
+    'prompt_toolkit>=3.0.50' \
+    'fuzzyfinder<=2.3.0' \
+    'dictdiffer>=0.9.0' \
+    'validators>=0.35.0' \
+    'pathspec>=1.0.0' \
+    'filelock>=3.25.0' \
+    'redis>=5.0.0,<6' \
+    'pydantic>=2.12.0,<3'
 
 
 # Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
