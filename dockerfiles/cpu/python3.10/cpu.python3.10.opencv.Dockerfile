@@ -48,7 +48,7 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --no-cache-dir \
     'aiohttp>=3.13.0,<4' \
     'requests-toolbelt==1.0.0' \
     'requests>=2.32.0,<3' \
-    'pandas>=0.24.2, <1.4' \
+    'pandas>=2.2.0,<3' \
     'tabulate==0.10.0' \
     'tqdm>=4.67.0' \
     'PyJWT>=2.12.0' \
