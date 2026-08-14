@@ -59,5 +59,8 @@ build_and_push dockerfiles/gpu/python3.10/gpu.python3.10.cuda11.8.pytorch2.Docke
 build_and_push dockerfiles/gpu/python3.11/gpu.python3.11.cuda11.8.pytorch2.Dockerfile  "gpu:python3.11_cuda11.8_pytorch2"
 build_and_push dockerfiles/gpu/python3.12/gpu.python3.12.cuda11.8.pytorch2.Dockerfile  "gpu:python3.12_cuda11.8_pytorch2"
 
+# ── Python 3.14 Consolidated CPU Image ───────────────────────────────────────
+build_and_push dockerfiles/cpu/python3.14/cpu.python3.14.full.Dockerfile  "cpu:python3.14_full"
+
 echo ""
 echo "Done. All images built$([ "$PUSH" = true ] && echo ' and pushed' || echo ' (push skipped)')."

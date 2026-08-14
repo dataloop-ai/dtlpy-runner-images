@@ -43,6 +43,14 @@ All images are hosted on `hub.dataloop.ai/dtlpy-runner-images/` and come pre-con
 - **OpenCV**: `hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_opencv`
 - **PyTorch 2**: `hub.dataloop.ai/dtlpy-runner-images/gpu:python3.12_cuda11.8_pytorch2`
 
+### Python 3.14 Consolidated CPU Image (Recommended)
+
+- **Full**: `hub.dataloop.ai/dtlpy-runner-images/cpu:python3.14_full` — All dependencies for Dataloop system apps (dtlpy, fastapi, onnxruntime, transformers, faiss, etc.)
+
+Based on the official `python:3.14` image (Debian). Includes everything most CPU apps need so they can run without a custom Dockerfile.
+
+**GPU apps** continue to use the existing `gpu:python3.12_cuda11.8_opencv` / `gpu:python3.12_cuda11.8_pytorch2` images.
+
 ## Usage
 
 ### Option 1: Use in dataloop.json
@@ -151,9 +159,10 @@ Finally, reference your custom image in the `dataloop.json` file:
 
 All images come with:
 
-- Pre-installed Python environment (3.10, 3.11, or 3.12)
+- Pre-installed Python environment (3.10, 3.11, 3.12, or 3.14)
 - Common data science and ML libraries (numpy, scipy, pandas, etc.)
 - Dataloop platform dependencies
+
 Specific images include:
 
 - **OpenCV images**: Computer vision libraries and dependencies
