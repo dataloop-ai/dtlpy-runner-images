@@ -78,7 +78,15 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     'openai' \
     'httpx' \
     'plotly' \
-    'pyarrow'
+    'pyarrow' \
+    # --- Donna v3 + Slack app ---
+    'python-dotenv' \
+    'aiosqlite' \
+    'slack-bolt' \
+    'langchain-core>=1.0.5' \
+    'langchain-openai' \
+    'json-repair' \
+    'markdown-to-mrkdwn'
 
 # Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
 RUN chmod -R 777 /tmp && \
