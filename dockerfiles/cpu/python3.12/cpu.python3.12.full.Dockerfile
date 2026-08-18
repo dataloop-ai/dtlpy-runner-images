@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.12-slim
 
 ENV DL_PYTHON_EXECUTABLE=/usr/local/bin/python3.12
 ENV PIP_NO_CACHE_DIR=1
@@ -16,7 +16,7 @@ RUN ln -sf ${DL_PYTHON_EXECUTABLE} /usr/bin/python && \
     ln -sf /usr/local/bin/pip3 /usr/bin/pip3 && \
     apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y ffmpeg libsm6 libxext6 acl && \
+    apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 acl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -41,10 +41,9 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     'pika==1.3.2' \
     'opencv-python-headless>=4.13.0' \
     'nms==0.1.6' \
-    'imgaug==0.4.0' \
     'Pillow>=12.0.0' \
     'ffmpeg-python' \
-    'tornado==6.5.5' \
+    'tornado==6.5.6' \
     'psutil>=7.0.0' \
     'certifi>=2026.2.25' \
     'aiohttp>=3.13.0,<4' \
@@ -78,7 +77,15 @@ RUN ${DL_PYTHON_EXECUTABLE} -m pip install --upgrade pip && \
     'openai' \
     'httpx' \
     'plotly' \
-    'pyarrow'
+    'pyarrow' \
+    # --- Donna v3 + Slack app ---
+    'python-dotenv' \
+    'aiosqlite' \
+    'slack-bolt' \
+    'langchain-core>=1.0.5' \
+    'langchain-openai' \
+    'json-repair' \
+    'markdown-to-mrkdwn'
 
 # Make /tmp accessible: existing files (chmod) + future files (setfacl default ACL)
 RUN chmod -R 777 /tmp && \
